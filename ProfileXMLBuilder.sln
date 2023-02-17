@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileXMLBuilder.Con", "ProfileXMLBuilder.Con\ProfileXMLBuilder.Con.csproj", "{D448510A-8699-450D-9EE8-54FAA7F672BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfileXMLBuilder.Con", "ProfileXMLBuilder.Con\ProfileXMLBuilder.Con.csproj", "{D448510A-8699-450D-9EE8-54FAA7F672BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileXMLBuilder.Lib", "ProfileXMLBuilder.Lib\ProfileXMLBuilder.Lib.csproj", "{8CE3C1D9-F230-47BC-881F-A96CC11410D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfileXMLBuilder.Lib", "ProfileXMLBuilder.Lib\ProfileXMLBuilder.Lib.csproj", "{8CE3C1D9-F230-47BC-881F-A96CC11410D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfileXMLBuilder.PS", "ProfileXMLBuilder.PS\ProfileXMLBuilder.PS.csproj", "{127D8C45-181C-4A71-A2DF-E6A8A609E913}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8CE3C1D9-F230-47BC-881F-A96CC11410D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CE3C1D9-F230-47BC-881F-A96CC11410D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CE3C1D9-F230-47BC-881F-A96CC11410D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127D8C45-181C-4A71-A2DF-E6A8A609E913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127D8C45-181C-4A71-A2DF-E6A8A609E913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127D8C45-181C-4A71-A2DF-E6A8A609E913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127D8C45-181C-4A71-A2DF-E6A8A609E913}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

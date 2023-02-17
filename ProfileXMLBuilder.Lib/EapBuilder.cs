@@ -100,7 +100,7 @@ namespace ProfileXMLBuilder.Lib
                     </EapType>
                   </Eap>
                   <EnableQuarantineChecks>false</EnableQuarantineChecks>
-                  <RequireCryptoBinding>true</RequireCryptoBinding>
+                  <RequireCryptoBinding>false</RequireCryptoBinding>
                   <PeapExtensions>
                     <PerformServerValidation xmlns=""http://www.microsoft.com/provisioning/MsPeapConnectionPropertiesV2"">true</PerformServerValidation>
                     <AcceptServerName xmlns=""http://www.microsoft.com/provisioning/MsPeapConnectionPropertiesV2"">true</AcceptServerName>

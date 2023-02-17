@@ -126,12 +126,12 @@ namespace ProfileXMLBuilder.PS
         {
             var builder = new Builder()
                 .SetAuthentication(
-                    AuthMethod: AuthenticationMethod.UserEapTls,
+                    AuthMethod: AuthenticationMethod.UserPeapMschapv2,
                     RadiusServerNames: "nps.contoso.com",
                     RadiusServerRootCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
                     DisableServerValidationPrompt: false,
-                    CertSelectionCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
-                    AllPurposeEnabled: true,
+                    CertSelectionCA: null,
+                    AllPurposeEnabled: null,
                     CertSelectionEku: null)
                 .AddDomainNameInformation(".contoso.com", "10.1.1.1", null, null, null)
                 .AddDomainNameInformation("contoso.com", "10.1.1.1", null, null, null)

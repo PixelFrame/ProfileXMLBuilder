@@ -104,6 +104,12 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
+        public Builder ResetAppTrigger()
+        {
+            _profile.AppTrigger = null;
+            return this;
+        }
+
         public Builder AddDomainNameInformation(string DomainName, string? DnsServers, string? WebProxyServers, bool? AutoTrigger, bool? Persistent)
         {
             _profile.DomainNameInformation ??= new();
@@ -115,6 +121,12 @@ namespace ProfileXMLBuilder.Lib
                 AutoTrigger = AutoTrigger,
                 Persistent = Persistent
             });
+            return this;
+        }
+
+        public Builder ResetDomainNameInformation()
+        {
+            _profile.DomainNameInformation = null;
             return this;
         }
 
@@ -143,6 +155,12 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
+        public Builder ResetTrafficFilter()
+        {
+            _profile.TrafficFilter = null;
+            return this;
+        }
+
         public Builder SetServers(string Value)
         {
             _profile.NativeProfile ??= new();
@@ -154,6 +172,13 @@ namespace ProfileXMLBuilder.Lib
         {
             _profile.NativeProfile ??= new();
             _profile.NativeProfile.RoutingPolicyType = Type?.ToString();
+            return this;
+        }
+
+        public Builder SetNativeProtocolType(NativeProtocolType? Type)
+        {
+            _profile.NativeProfile ??= new();
+            _profile.NativeProfile.NativeProtocolType = Type?.ToString();
             return this;
         }
 
@@ -284,7 +309,8 @@ namespace ProfileXMLBuilder.Lib
             using var xw = XmlWriter.Create(sw, new()
             {
                 Encoding = Encoding.UTF8,
-                Indent = true
+                Indent = true,
+                OmitXmlDeclaration = true
             });
             serializer.Serialize(xw, _profile, ns);
             var result = Regex.Replace(sw.ToString(), @"\s+<\w+ p\d+:nil=""true"" xmlns:p\d+=""http://www.w3.org/2001/XMLSchema-instance"" />", string.Empty);

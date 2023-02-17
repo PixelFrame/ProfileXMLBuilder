@@ -9,6 +9,14 @@ namespace ProfileXMLBuilder.Lib
     {
         private readonly VPNProfile _profile = new();
 
+        private AuthenticationMethod _AuthMethod;
+        private string? _RadiusServerNames;
+        private List<string>? _RadiusServerRootCA;
+        private bool? _DisableServerValidationPrompt;
+        private List<string>? _CertSelectionCA;
+        private bool? _AllPurposeEnabled;
+        private List<KeyValuePair<string, string>>? _CertSelectionEku;
+
         public Builder()
         { }
 
@@ -233,6 +241,15 @@ namespace ProfileXMLBuilder.Lib
             bool? AllPurposeEnabled,
             List<KeyValuePair<string, string>>? CertSelectionEku)
         {
+            // Save the state for the partial modification
+            _AuthMethod = AuthMethod;
+            _RadiusServerNames = RadiusServerNames;
+            _RadiusServerRootCA = RadiusServerRootCA;
+            _DisableServerValidationPrompt = DisableServerValidationPrompt;
+            _CertSelectionCA = CertSelectionCA;
+            _AllPurposeEnabled = AllPurposeEnabled;
+            _CertSelectionEku = CertSelectionEku;
+
             _profile.NativeProfile ??= new();
             if (AuthMethod == AuthenticationMethod.MachineCert)
             {
@@ -287,6 +304,60 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
+        public Builder SetRadiusServerNames(string Value)
+        {
+            if(_AuthMethod != AuthenticationMethod.UserEapTls &&
+                _AuthMethod != AuthenticationMethod.UserPeapTls &&
+                _AuthMethod != AuthenticationMethod.UserPeapMschapv2)
+            {
+                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS server names");
+            }
+            SetAuthentication(_AuthMethod, Value, _RadiusServerRootCA, _DisableServerValidationPrompt, _CertSelectionCA, _AllPurposeEnabled, _CertSelectionEku);
+            return this;
+        }
+
+        public Builder SetRadiusServerRootCA(List<string> Value)
+        {
+            if (_AuthMethod != AuthenticationMethod.UserEapTls &&
+                _AuthMethod != AuthenticationMethod.UserPeapTls &&
+                _AuthMethod != AuthenticationMethod.UserPeapMschapv2)
+            {
+                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS server names");
+            }
+            SetAuthentication(_AuthMethod, _RadiusServerNames, Value, _DisableServerValidationPrompt, _CertSelectionCA, _AllPurposeEnabled, _CertSelectionEku);
+            return this;
+        }
+
+        public Builder SetDisableServerValidationPrompt(bool Value)
+        {
+            if (_AuthMethod != AuthenticationMethod.UserEapTls &&
+                _AuthMethod != AuthenticationMethod.UserPeapTls &&
+                _AuthMethod != AuthenticationMethod.UserPeapMschapv2)
+            {
+                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS server names");
+            }
+            SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, Value, _CertSelectionCA, _AllPurposeEnabled, _CertSelectionEku);
+            return this;
+        }
+
+        public Builder SetCertificateSelectionHash(List<string>? Value)
+        {
+            SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, _DisableServerValidationPrompt, Value, _AllPurposeEnabled, _CertSelectionEku);
+            return this;
+        }
+
+        public Builder SetCertificateSelectionEku(List<KeyValuePair<string, string>>? Value)
+        {
+            SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, _DisableServerValidationPrompt, _CertSelectionCA, _AllPurposeEnabled, Value);
+            return this;
+        }
+
+        public Builder SetCertificateSelectionAllPurposeEnabled(bool? Value)
+        {
+            SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, _DisableServerValidationPrompt, _CertSelectionCA, Value, _CertSelectionEku);
+            return this;
+        }
+
         public Builder AddRoute(string Address, byte Prefix, bool? ExclusionRoute, uint? Metric)
         {
             _profile.Route ??= new();
@@ -297,6 +368,12 @@ namespace ProfileXMLBuilder.Lib
                 ExclusionRoute = ExclusionRoute,
                 Metric = Metric
             });
+            return this;
+        }
+
+        public Builder ResetRoute()
+        {
+            _profile.Route = null;
             return this;
         }
 

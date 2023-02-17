@@ -340,7 +340,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder SetCertificateSelectionHash(List<string>? Value)
+        public Builder SetCertificateSelectionRootCA(List<string>? Value)
         {
             SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, _DisableServerValidationPrompt, Value, _AllPurposeEnabled, _CertSelectionEku);
             return this;
@@ -390,7 +390,7 @@ namespace ProfileXMLBuilder.Lib
                 OmitXmlDeclaration = true
             });
             serializer.Serialize(xw, _profile, ns);
-            var result = Regex.Replace(sw.ToString(), @"\s+<\w+ p\d+:nil=""true"" xmlns:p\d+=""http://www.w3.org/2001/XMLSchema-instance"" />", string.Empty);
+            var result = Regex.Replace(sw.ToString(), @"\s+<.* />", string.Empty); // Remove all XML tags without content, as PowerShell will convert $null to string.Empty leading to empty tags
             return result;
         }
     }

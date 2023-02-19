@@ -193,8 +193,14 @@ namespace ProfileXMLBuilder.Lib
                 var peapEapIntend = "                        ";
                 foreach (var ca in Value)
                 {
-                    sbEap.AppendLine($"{eapIntend}<TrustedRootCA>{ca}</TrustedRootCA>");
-                    sbPeapEap.AppendLine($"{peapEapIntend}<TrustedRootCA>{ca}</TrustedRootCA>");
+                    var hash = Helper.CheckAndFormatCertificateHash(ca);
+                    if (hash == string.Empty)
+                    {
+                        throw new InvalidDataException($"Invalid hash string {ca}");
+                    }
+
+                    sbEap.AppendLine($"{eapIntend}<TrustedRootCA>{hash}</TrustedRootCA>");
+                    sbPeapEap.AppendLine($"{peapEapIntend}<TrustedRootCA>{hash}</TrustedRootCA>");
                 }
                 _template = _template.Replace("{EapTrustedRootCA}", sbEap.ToString())
                                      .Replace("{PeapTrustedRootCA}", sbEap.ToString())

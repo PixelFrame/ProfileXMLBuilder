@@ -1,6 +1,7 @@
 ﻿using System.Xml.Schema;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Net;
 
 namespace ProfileXMLBuilder.Lib
 {
@@ -46,7 +47,25 @@ namespace ProfileXMLBuilder.Lib
     {
         public bool Enabled { get; set; } = true;
         public string? Eku { get; set; } = null;
-        public string? IssuerHash { get; set; } = null;
+        private string? issuerHash = null;
+        public string? IssuerHash
+        {
+            get => issuerHash;
+            set
+            {
+                if (value == null)
+                {
+                    issuerHash = null;
+                    return;
+                }
+                var hash = Helper.CheckAndFormatCertificateHash(value);
+                if (hash == string.Empty)
+                {
+                    throw new InvalidDataException($"Invalid hash string {value}");
+                }
+                issuerHash = hash;
+            }
+        }
     }
 
     public class AppTrigger
@@ -72,11 +91,74 @@ namespace ProfileXMLBuilder.Lib
     {
         public App? App { get; set; } = null;
         public string? Claims { get; set; } = null;
-        public string? Protocol { get; set; } = null;
-        public string? LocalPortRanges { get; set; } = null;
-        public string? RemotePortRanges { get; set; } = null;
-        public string? LocalAddressRanges { get; set; } = null;
-        public string? RemoteAddressRanges { get; set; } = null;
+        private string? protocol = null;
+        public string? Protocol
+        {
+            get => protocol;
+            set
+            {
+                if (byte.TryParse(value, out _))
+                {
+                    protocol = value;
+                }
+                else
+                {
+                    throw new InvalidDataException("Protocol should be a numeric value in 0-255");
+                }
+            }
+        }
+        private string? localPortRanges = null;
+        public string? LocalPortRanges
+        {
+            get => localPortRanges;
+            set
+            {
+                if (!Helper.CheckPortRangeValue(value, out var f))
+                {
+                    throw new InvalidDataException($"${f} is not a valid port range");
+                }
+                else localPortRanges = value;
+            }
+        }
+        private string? remotePortRanges = null;
+        public string? RemotePortRanges
+        {
+            get => remotePortRanges;
+            set
+            {
+                if (!Helper.CheckPortRangeValue(value, out var f))
+                {
+                    throw new InvalidDataException($"\"{f}\" is not a valid port range");
+                }
+                else remotePortRanges = value;
+            }
+        }
+        private string? localAddressRanges = null;
+        public string? LocalAddressRanges
+        {
+            get => localAddressRanges;
+            set
+            {
+                if (!Helper.CheckAddressRangeValue(value, out var f))
+                {
+                    throw new InvalidDataException($"\"{f}\" is not a valid address range");
+                }
+                else localAddressRanges = value;
+            }
+        }
+        private string? remoteAddressRanges = null;
+        public string? RemoteAddressRanges
+        {
+            get => remoteAddressRanges;
+            set
+            {
+                if (!Helper.CheckAddressRangeValue(value, out var f))
+                {
+                    throw new InvalidDataException($"\"{f}\" is not a valid address range");
+                }
+                else remoteAddressRanges = value;
+            }
+        }
         public string? RoutingPolicyType { get; set; } = null;
         public string? Direction { get; set; } = null;
     }
@@ -112,7 +194,22 @@ namespace ProfileXMLBuilder.Lib
 
     public class Route
     {
-        public string Address { get; set; } = string.Empty;
+        private string address = "0.0.0.0";
+        public string Address
+        {
+            get => address;
+            set
+            {
+                if (IPAddress.TryParse(value, out _))
+                {
+                    address = value;
+                }
+                else
+                {
+                    throw new InvalidDataException($"\"{value}\" is not a valid address");
+                }
+            }
+        }
         public byte Prefix { get; set; } = 0;
         public bool? ExclusionRoute { get; set; } = null;
         public uint? Metric { get; set; } = null;

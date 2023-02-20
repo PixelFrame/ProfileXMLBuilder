@@ -10,13 +10,97 @@ namespace ProfileXMLBuilder.PS
     [OutputType(typeof(Builder))]
     public class NewProfileXMLBuilderCommand : PSCmdlet
     {
+        [Parameter(Mandatory = false)]
+        public string Servers { get; set; } = "vpn.contoso.com";
+
+        [Parameter(Mandatory = false)]
+        public string DnsSuffix { get; set; } = "contoso.com";
+
+        [Parameter(Mandatory = false)]
+        public string TrustedNetworkDetection { get; set; } = "contoso.com";
+
+        [Parameter(Mandatory = false)]
+        public RoutingPolicyType RoutingPolicy { get; set; } = RoutingPolicyType.SplitTunnel;
+
+        [Parameter(Mandatory = false)]
+        public NativeProtocolType NativeProtocol { get; set; } = NativeProtocolType.Automatic;
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter DeviceTunnel { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public PSAuthentication Authentication { get; set; } = new();
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter DisableClassBasedDefaultRoutes { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public DomainNameInformation[]? DomainNameInformation { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public Route[]? Routes { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public TrafficFilter[]? TrafficFilters { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public string[]? AppTriggers { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public ProxyType ProxyType { get; set; }
+        [Parameter(Mandatory = false)]
+        public string? ProxyValue { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public string? SsoEku { get; set; }
+        [Parameter(Mandatory = false)]
+        public string? SsoCA { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter NoRegisterDNS { get; set; }
+
+        [Parameter(Mandatory = false)]
+        public SwitchParameter NoRememberCredentials { get; set; }
+
         protected override void BeginProcessing()
         {
         }
 
         protected override void ProcessRecord()
         {
-            WriteObject(new Builder());
+            var builder = new Builder()
+                .SetServers(Servers)
+                .SetDnsSuffix(DnsSuffix)
+                .SetTrustedNetworkDetection(TrustedNetworkDetection)
+                .SetRoutingPolicyType(RoutingPolicy)
+                .SetNativeProtocolType(NativeProtocol)
+                .SetDeviceTunnel(DeviceTunnel)
+                .SetAuthentication(
+                    AuthMethod: Authentication.AuthMethod,
+                    RadiusServerNames: Authentication.RadiusServerNames,
+                    RadiusServerRootCA: Authentication.RadiusServerRootCA,
+                    DisableServerValidationPrompt: Authentication.DisableServerValidationPrompt,
+                    CertSelectionCA: Authentication.CertSelectionCA,
+                    AllPurposeEnabled: Authentication.AllPurposeEnabled,
+                    CertSelectionEku: Authentication.CertSelectionEku)
+                .SetDisableClassBasedDefaultRoute(DisableClassBasedDefaultRoutes);
+
+            if (Routes != null) builder.AddRoutesInternal(Routes);
+            if (TrafficFilters != null) builder.AddTrafficFiltersInternal(TrafficFilters);
+            if (DomainNameInformation != null) builder.AddDomainNameInformationInternal(DomainNameInformation);
+            if (AppTriggers != null)
+            {
+                foreach (var appTrigger in AppTriggers)
+                {
+                    builder.AddAppTrigger(appTrigger);
+                }
+            }
+            if (ProxyValue != null) builder.SetProxy(ProxyType, ProxyValue);
+            if (SsoEku != null || SsoCA != null) builder.SetDeviceCompliance(true, SsoEku, SsoCA);
+            if (NoRegisterDNS) builder.SetRegisterDNS(false);
+            if (NoRememberCredentials) builder.SetRememberCredentials(false);
+
+            WriteObject(builder);
         }
 
         protected override void EndProcessing()
@@ -160,6 +244,28 @@ namespace ProfileXMLBuilder.PS
                 .SetAuthentication(AuthenticationMethod.MachineCert, null, null, null, null, null, null)
                 .AddRoute("10.1.1.0", 24, null, null);
             WriteObject(builder);
+        }
+
+        protected override void EndProcessing()
+        {
+        }
+    }
+
+    [Cmdlet(VerbsCommon.Get, "ProfileXML")]
+    [OutputType(typeof(string))]
+    public class GetProfileXMLCommand : PSCmdlet
+    {
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipeline = true)]
+        public Builder? Builder { get; set; }
+
+        protected override void BeginProcessing()
+        {
+        }
+
+        protected override void ProcessRecord()
+        {
+            var xml = Builder!.GetXml();
+            WriteObject(xml);
         }
 
         protected override void EndProcessing()

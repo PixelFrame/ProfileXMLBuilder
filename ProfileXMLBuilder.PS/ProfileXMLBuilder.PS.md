@@ -10,7 +10,46 @@ It provides a few sample VPN profile settings for quick use.
 Install-Module ProfileXMLBuilder.PS
 ```
 
-## Basic Usage
+## Usage
+
+### PowerShell Style
+
+You may create all the needed params with PowerShell cmdlets and then pass them to `New-ProfileXMLBuilder`.
+
+To get the final XML, pass the Builder object to `Get-ProfileXML`.
+
+The following is an EAP-TLS L2TP User Split Tunnel example.
+
+``` PowerShell
+$rt0 = New-ProfileXMLRoute -Address 10.1.1.128 -Prefix 26 -Metric 30
+$rt1 = New-ProfileXMLRoute -Address 10.50.10.128 -Prefix 26 -Metric 30
+$tf0 = New-ProfileXMLTrafficFilter -Protocol 6 -RemotePortRanges '80, 443'
+$tf1 = New-ProfileXMLTrafficFilter -Protocol 17 -RemotePortRanges '443'
+$dni0 = New-ProfileXMLDomainNameInformation -DomainName '.'
+$dni1 = New-ProfileXMLDomainNameInformation -DomainName 'fabrikam.com' -DnsServers 10.1.1.1
+$dni2 = New-ProfileXMLDomainNameInformation -DomainName '.fabrikam.com' -DnsServers 10.1.1.1 -AutoTrigger -Persistent
+$app0 = '%SystemRoot%/System32/ping.exe'
+$app1 = '%ProgramFiles%/Vendor/FancyTool.exe'
+$auth = New-ProfileXMLAuthentication -UserAuth -UserMethod UserEapTls `
+									 -RadiusServerNames 'nps.fabrikam.com' -RadiusServerRootCA '425559414F4855494441425559414F4855494441' `
+									 -CertSelectionEku @{ EKU0='OID0'; EKU1='OID1' }
+
+$builder = New-ProfileXMLBuilder -Servers vpn.fabrikam.com `
+                                 -DnsSuffix fabrikam.com `
+                                 -TrustedNetworkDetection fabrikam.com `
+                                 -NativeProtocol Automatic `
+                                 -RoutingPolicy SplitTunnel `
+                                 -Authentication $auth `
+                                 -DomainNameInformation $dni0, $dni1, $dni2 `
+                                 -AppTriggers $app0, $app1 `
+                                 -ProxyType AutoConfigUrl -ProxyValue 'https://corpprx.fabrikam.com/vpn.js' `
+                                 -Routes $rt0,$rt1 `
+                                 -TrafficFilters $tf0, $tf1
+$builder | Get-ProfileXML
+pause
+```
+
+### C# Style
 
 First create a Builder instance with `New-ProfileXMLBuilder` cmdlet.
 
@@ -107,7 +146,7 @@ Output:
 </VPNProfile>
 ```
 
-## Sample Builders
+### Sample Builders
 
 The module packs 5 common VPN configurations.
 
@@ -207,7 +246,7 @@ Output
                     </EapType>
                   </Eap>
                   <EnableQuarantineChecks>false</EnableQuarantineChecks>
-                  <RequireCryptoBinding>true</RequireCryptoBinding>
+                  <RequireCryptoBinding>false</RequireCryptoBinding>
                   <PeapExtensions>
                     <PerformServerValidation xmlns="http://www.microsoft.com/provisioning/MsPeapConnectionPropertiesV2">true</PerformServerValidation>
                     <AcceptServerName xmlns="http://www.microsoft.com/provisioning/MsPeapConnectionPropertiesV2">true</AcceptServerName>

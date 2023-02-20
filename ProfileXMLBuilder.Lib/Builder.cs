@@ -1,7 +1,10 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
+
+[assembly:InternalsVisibleTo("ProfileXMLBuilder.PS")]
 
 namespace ProfileXMLBuilder.Lib
 {
@@ -118,6 +121,13 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
+        internal Builder AddDomainNameInformationInternal(DomainNameInformation[] domainNameInformation)
+        {
+            _profile.DomainNameInformation ??= new();
+            _profile.DomainNameInformation.AddRange(domainNameInformation);
+            return this;
+        }
+
         public Builder AddDomainNameInformation(string DomainName, string? DnsServers, string? WebProxyServers, bool? AutoTrigger, bool? Persistent)
         {
             _profile.DomainNameInformation ??= new();
@@ -135,6 +145,13 @@ namespace ProfileXMLBuilder.Lib
         public Builder ResetDomainNameInformation()
         {
             _profile.DomainNameInformation = null;
+            return this;
+        }
+
+        internal Builder AddTrafficFiltersInternal(TrafficFilter[] trafficFilters)
+        {
+            _profile.TrafficFilter ??= new();
+            _profile.TrafficFilter.AddRange(trafficFilters);
             return this;
         }
 
@@ -306,7 +323,7 @@ namespace ProfileXMLBuilder.Lib
 
         public Builder SetRadiusServerNames(string Value)
         {
-            if(_AuthMethod != AuthenticationMethod.UserEapTls &&
+            if (_AuthMethod != AuthenticationMethod.UserEapTls &&
                 _AuthMethod != AuthenticationMethod.UserPeapTls &&
                 _AuthMethod != AuthenticationMethod.UserPeapMschapv2)
             {
@@ -355,6 +372,13 @@ namespace ProfileXMLBuilder.Lib
         public Builder SetCertificateSelectionAllPurposeEnabled(bool? Value)
         {
             SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, _DisableServerValidationPrompt, _CertSelectionCA, Value, _CertSelectionEku);
+            return this;
+        }
+
+        internal Builder AddRoutesInternal(Route[] route)
+        {
+            _profile.Route ??= new();
+            _profile.Route.AddRange(route);
             return this;
         }
 

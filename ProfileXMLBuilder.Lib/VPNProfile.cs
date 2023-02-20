@@ -187,7 +187,7 @@ namespace ProfileXMLBuilder.Lib
 
     public class Authentication
     {
-        public string? UserMethod { get; set; } = "EAP";
+        public string? UserMethod { get; set; } = "MSChapv2";
         public Eap? Eap { get; set; } = null;
         public string? MachineMethod { get; set; } = null;
     }

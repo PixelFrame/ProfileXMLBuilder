@@ -14,7 +14,7 @@ namespace ProfileXMLBuilder.PS
         public string Address { get; set; } = "0.0.0.0";
 
         [Parameter(Mandatory = true)]
-        public byte Prefix { get; set; } = 0;
+        public byte PrefixSize { get; set; } = 0;
 
         [Parameter(Mandatory = false)]
         public SwitchParameter ExclusionRoute { get; set; }
@@ -31,7 +31,7 @@ namespace ProfileXMLBuilder.PS
             var route = new Route()
             {
                 Address = Address,
-                Prefix = Prefix,
+                PrefixSize = PrefixSize,
                 ExclusionRoute = ExclusionRoute.IsPresent ? ExclusionRoute : null,
                 Metric = Metric
             };

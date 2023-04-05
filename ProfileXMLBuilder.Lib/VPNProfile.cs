@@ -210,7 +210,7 @@ namespace ProfileXMLBuilder.Lib
                 }
             }
         }
-        public byte Prefix { get; set; } = 0;
+        public byte PrefixSize { get; set; } = 0;
         public bool? ExclusionRoute { get; set; } = null;
         public uint? Metric { get; set; } = null;
     }

@@ -382,13 +382,13 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder AddRoute(string Address, byte Prefix, bool? ExclusionRoute, uint? Metric)
+        public Builder AddRoute(string Address, byte PrefixSize, bool? ExclusionRoute, uint? Metric)
         {
             _profile.Route ??= new();
             _profile.Route.Add(new()
             {
                 Address = Address,
-                Prefix = Prefix,
+                PrefixSize = PrefixSize,
                 ExclusionRoute = ExclusionRoute,
                 Metric = Metric
             });

@@ -247,6 +247,12 @@ namespace ProfileXMLBuilder.Lib
             var sb = new StringBuilder();
             foreach (var ca in Value)
             {
+                var hash = Helper.CheckAndFormatCertificateHash(ca);
+                if (hash == string.Empty)
+                {
+                    throw new InvalidDataException($"Invalid hash string {ca}");
+                }
+
                 sb.AppendLine($"{intend}  <IssuerHash>{ca}</IssuerHash>");
             }
             _template = _template.Replace("{IssuerHash}", sb.ToString());

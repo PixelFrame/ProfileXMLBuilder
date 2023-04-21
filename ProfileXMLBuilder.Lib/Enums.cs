@@ -102,4 +102,10 @@
         UserMschapv2,
         MachineCert
     }
+
+    public enum TrafficDirection
+    {
+        Inbound,
+        Outbound
+    }
 }

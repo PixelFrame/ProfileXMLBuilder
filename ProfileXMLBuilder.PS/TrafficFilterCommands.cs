@@ -32,7 +32,7 @@ namespace ProfileXMLBuilder.PS
         public RoutingPolicyType? RoutingPolicyType { get; set; } = null;
 
         [Parameter(Mandatory = false)]
-        public string? Direction { get; set; } = null;
+        public TrafficDirection? Direction { get; set; } = null;
 
         protected override void BeginProcessing()
         {
@@ -44,7 +44,7 @@ namespace ProfileXMLBuilder.PS
                 LocalAddressRanges = LocalAddressRanges,
                 RemoteAddressRanges = RemoteAddressRanges,
                 RoutingPolicyType = RoutingPolicyType?.ToString(),
-                Direction = Direction
+                Direction = Direction?.ToString()
             };
             if (AppId != null)
             {

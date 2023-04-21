@@ -155,7 +155,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder AddTrafficFilter(string? AppId, string? Claims, string? Protocol, string? LocalPortRanges, string? RemotePortRanges, string? LocalAddressRanges, string? RemoteAddressRanges, RoutingPolicyType? RoutingPolicyType, string? Direction)
+        public Builder AddTrafficFilter(string? AppId, string? Claims, string? Protocol, string? LocalPortRanges, string? RemotePortRanges, string? LocalAddressRanges, string? RemoteAddressRanges, RoutingPolicyType? RoutingPolicyType, TrafficDirection? Direction)
         {
             _profile.TrafficFilter ??= new();
             var item = new TrafficFilter()
@@ -167,7 +167,7 @@ namespace ProfileXMLBuilder.Lib
                 LocalAddressRanges = LocalAddressRanges,
                 RemoteAddressRanges = RemoteAddressRanges,
                 RoutingPolicyType = RoutingPolicyType?.ToString(),
-                Direction = Direction
+                Direction = Direction?.ToString()
             };
             if (AppId != null)
             {

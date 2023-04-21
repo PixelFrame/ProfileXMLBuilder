@@ -97,9 +97,9 @@ namespace ProfileXMLBuilder.Lib
             get => protocol;
             set
             {
-                if (byte.TryParse(value, out _))
+                if (value == null || byte.TryParse(value, out _))
                 {
-                    protocol = value;
+                    protocol = value?.Trim();
                 }
                 else
                 {
@@ -115,9 +115,9 @@ namespace ProfileXMLBuilder.Lib
             {
                 if (!Helper.CheckPortRangeValue(value, out var f))
                 {
-                    throw new InvalidDataException($"${f} is not a valid port range");
+                    throw new InvalidDataException($"{f} is not a valid port range");
                 }
-                else localPortRanges = value;
+                else localPortRanges = value?.Replace(" ", string.Empty);
             }
         }
         private string? remotePortRanges = null;
@@ -130,7 +130,7 @@ namespace ProfileXMLBuilder.Lib
                 {
                     throw new InvalidDataException($"\"{f}\" is not a valid port range");
                 }
-                else remotePortRanges = value;
+                else remotePortRanges = value?.Replace(" ", string.Empty);
             }
         }
         private string? localAddressRanges = null;
@@ -143,7 +143,7 @@ namespace ProfileXMLBuilder.Lib
                 {
                     throw new InvalidDataException($"\"{f}\" is not a valid address range");
                 }
-                else localAddressRanges = value;
+                else localAddressRanges = value?.Replace(" ", string.Empty);
             }
         }
         private string? remoteAddressRanges = null;
@@ -156,7 +156,7 @@ namespace ProfileXMLBuilder.Lib
                 {
                     throw new InvalidDataException($"\"{f}\" is not a valid address range");
                 }
-                else remoteAddressRanges = value;
+                else remoteAddressRanges = value?.Replace(" ", string.Empty);
             }
         }
         public string? RoutingPolicyType { get; set; } = null;

@@ -253,7 +253,7 @@ namespace ProfileXMLBuilder.Lib
                     throw new InvalidDataException($"Invalid hash string {ca}");
                 }
 
-                sb.AppendLine($"{intend}  <IssuerHash>{ca}</IssuerHash>");
+                sb.AppendLine($"{intend}  <IssuerHash>{hash}</IssuerHash>");
             }
             _template = _template.Replace("{IssuerHash}", sb.ToString());
             return this;

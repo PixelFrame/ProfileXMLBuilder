@@ -12,7 +12,48 @@ namespace ProfileXMLBuilder.Lib
         public bool? RegisterDNS { get; set; } = true;
         public string? TrustedNetworkDetection { get; set; } = "contoso.com";
         public bool? AlwaysOn { get; set; } = true;
+        public bool? AlwaysOnActive { get; set; } = null;
         public bool? DeviceTunnel { get; set; } = false;
+        public bool? ByPassForLocal { get; set; } = null;
+        public string? DataEncryption { get; set; } = null;
+        public bool? DisableAdvancedOptionsEditButton { get; set; } = null;
+        public bool? DisableDisconnectButton { get; set; } = null;
+        public bool? DisableIKEv2Fragmentation { get; set; } = null;
+        private int? ipv4InterfaceMetric = null;
+        public int? IPv4InterfaceMetric
+        {
+            get => ipv4InterfaceMetric;
+            set
+            {
+                if (value != null && (value < 1 || value > 9999))
+                {
+                    throw new InvalidDataException("Metric value should be a value in 1-9999");
+                }
+                else
+                {
+                    ipv4InterfaceMetric = value;
+                }
+            }
+        }
+        private int? ipv6InterfaceMetric { get; set; } = null;
+        public int? IPv6InterfaceMetric
+        {
+            get => ipv6InterfaceMetric;
+            set
+            {
+                if (value != null && (value < 1 || value > 9999))
+                {
+                    throw new InvalidDataException("Metric value should be a value in 1-9999");
+                }
+                else
+                {
+                    ipv6InterfaceMetric = value;
+                }
+            }
+        }
+        public uint? NetworkOutageTime { get; set; } = null;
+        public bool? PrivateNetwork { get; set; } = null;
+        public bool? UseRasCredentials { get; set; } = null;
         public Proxy? Proxy { get; set; } = null;
         public DeviceCompliance? DeviceCompliance { get; set; } = null;
         [XmlElement("AppTrigger")]
@@ -168,11 +209,39 @@ namespace ProfileXMLBuilder.Lib
         public string Servers { get; set; } = "vpn.contoso.com";
         public string? RoutingPolicyType { get; set; } = "SplitTunnel";
         public string? NativeProtocolType { get; set; } = "Automatic";
+        public ProtocolList? ProtocolList { get; set; } = null;
         public string? L2tpPsk { get; set; } = null;
         public bool? DisableClassBasedDefaultRoute { get; set; } = true;
         public bool? PlumbIKEv2TSAsRoutes { get; set; } = null;
         public CryptographySuite? CryptographySuite { get; set; } = null;
         public Authentication Authentication { get; set; } = new();
+    }
+
+    public class ProtocolList
+    {
+        [XmlElement("NativeProtocol")]
+        public List<NativeProtocol> NativeProtocol { get; set; } = new();
+        private int? retryTimeInHours = null;
+        public int? RetryTimeInHours
+        {
+            get => retryTimeInHours;
+            set
+            {
+                if (value != null && (value < 1 || value > 500000))
+                {
+                    throw new InvalidDataException("RetryTimeInHours should be a value in 1-500000");
+                }
+                else
+                {
+                    retryTimeInHours = value;
+                }
+            }
+        }
+    }
+
+    public class NativeProtocol
+    {
+        public string Type { get; set; } = "IKEv2";
     }
 
     public class CryptographySuite

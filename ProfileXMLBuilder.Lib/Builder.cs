@@ -18,6 +18,29 @@ namespace ProfileXMLBuilder.Lib
         private bool? _AllPurposeEnabled;
         private List<KeyValuePair<string, string>>? _CertSelectionEku;
 
+        public bool Win11Profile
+        {
+            get
+            {
+                var _ = _profile.DataEncryption == null &&
+                    _profile.DisableAdvancedOptionsEditButton == null &&
+                    _profile.DisableDisconnectButton == null &&
+                    _profile.DisableIKEv2Fragmentation == null &&
+                    _profile.IPv4InterfaceMetric == null &&
+                    _profile.IPv6InterfaceMetric == null &&
+                    _profile.NetworkOutageTime == null &&
+                    _profile.PrivateNetwork == null &&
+                    _profile.UseRasCredentials == null;
+                if (_profile.NativeProfile != null)
+                {
+                    _ = _ &&
+                        _profile.NativeProfile.NativeProtocolType != "ProtocolList" &&
+                        _profile.NativeProfile.ProtocolList == null;
+                }
+                return !_;
+            }
+        }
+
         public Builder()
         { }
 
@@ -51,9 +74,75 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
+        public Builder SetAlwaysOnActive(bool? Value)
+        {
+            _profile.AlwaysOnActive = Value;
+            return this;
+        }
+
         public Builder SetDeviceTunnel(bool? Value)
         {
             _profile.DeviceTunnel = Value;
+            return this;
+        }
+
+        public Builder SetByPassForLocal(bool? Value)
+        {
+            _profile.ByPassForLocal = Value;
+            return this;
+        }
+
+        public Builder SetDataEncryption(DataEncryptionLevel? Value)
+        {
+            _profile.DataEncryption = Value?.ToString();
+            return this;
+        }
+
+        public Builder SetDisableAdvancedOptionsEditButton(bool? Value)
+        {
+            _profile.DisableAdvancedOptionsEditButton = Value;
+            return this;
+        }
+
+        public Builder SetDisableDisconnectButton(bool? Value)
+        {
+            _profile.DisableDisconnectButton = Value;
+            return this;
+        }
+
+        public Builder SetDisableIKEv2Fragmentation(bool? Value)
+        {
+            _profile.DisableIKEv2Fragmentation = Value;
+            return this;
+        }
+
+        public Builder SetIPv4InterfaceMetric(int? Value)
+        {
+            _profile.IPv4InterfaceMetric = Value;
+            return this;
+        }
+
+        public Builder SetIPv6InterfaceMetric(int? Value)
+        {
+            _profile.IPv6InterfaceMetric = Value;
+            return this;
+        }
+
+        public Builder SetNetworkOutageTime(uint? Value)
+        {
+            _profile.NetworkOutageTime = Value;
+            return this;
+        }
+
+        public Builder SetPrivateNetwork(bool? Value)
+        {
+            _profile.PrivateNetwork = Value;
+            return this;
+        }
+
+        public Builder SetUseRasCredentials(bool? Value)
+        {
+            _profile.UseRasCredentials = Value;
             return this;
         }
 
@@ -200,8 +289,26 @@ namespace ProfileXMLBuilder.Lib
 
         public Builder SetNativeProtocolType(NativeProtocolType? Type)
         {
+            if (Type == NativeProtocolType.ProtocolList)
+            {
+                throw new InvalidOperationException("Call SetNativeProtocolList to set ProtocolList");
+            }
             _profile.NativeProfile ??= new();
             _profile.NativeProfile.NativeProtocolType = Type?.ToString();
+            _profile.NativeProfile.ProtocolList = null;
+            return this;
+        }
+
+        public Builder SetNativeProtocolList(NativeProtocolListType[] Types, int? RetryTimeInHours = null)
+        {
+            _profile.NativeProfile ??= new();
+            _profile.NativeProfile.NativeProtocolType = NativeProtocolType.ProtocolList.ToString();
+            _profile.NativeProfile.ProtocolList = new();
+            foreach (var t in Types)
+            {
+                _profile.NativeProfile.ProtocolList.NativeProtocol.Add(new() { Type = t.ToString() });
+            }
+            _profile.NativeProfile.ProtocolList.RetryTimeInHours = RetryTimeInHours;
             return this;
         }
 

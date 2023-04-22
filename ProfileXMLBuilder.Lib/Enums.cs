@@ -17,7 +17,17 @@
         Automatic,
         PPTP,
         L2TP,
-        IKEv2
+        IKEv2,
+        SSTP,
+        ProtocolList
+    }
+
+    public enum NativeProtocolListType
+    {
+        PPTP,
+        L2TP,
+        IKEv2,
+        SSTP
     }
 
     public enum UserMethod
@@ -107,5 +117,13 @@
     {
         Inbound,
         Outbound
+    }
+
+    public enum DataEncryptionLevel
+    {
+        None,
+        Require,
+        Max,
+        Optional
     }
 }

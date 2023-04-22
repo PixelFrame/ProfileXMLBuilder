@@ -159,8 +159,8 @@ namespace ProfileXMLBuilder.Lib
 
         private string _template = string.Empty;
         private AuthenticationMethod _authMethod;
-        
-        public EapBuilder(AuthenticationMethod AuthMethod) 
+
+        public EapBuilder(AuthenticationMethod AuthMethod)
         {
             _authMethod = AuthMethod;
             switch (AuthMethod)
@@ -168,14 +168,14 @@ namespace ProfileXMLBuilder.Lib
                 case AuthenticationMethod.UserEapTls: _template = EapTlsTemplate; break;
                 case AuthenticationMethod.UserEapMschapv2: _template = EapMschapv2Template; break;
                 case AuthenticationMethod.UserPeapTls: _template = PeapTlsTemplate; break;
-                case AuthenticationMethod.UserPeapMschapv2: _template+= PeapMschapv2Template; break;
+                case AuthenticationMethod.UserPeapMschapv2: _template += PeapMschapv2Template; break;
                 default: throw new InvalidOperationException("Provided authentication method is not a supported EAP method");
             }
         }
 
         public EapBuilder SetRadiusServerNames(string? Value)
         {
-            _template = _template.Replace("{RadiusServerNames}", Value ?? string.Empty); 
+            _template = _template.Replace("{RadiusServerNames}", Value ?? string.Empty);
             return this;
         }
 
@@ -189,7 +189,7 @@ namespace ProfileXMLBuilder.Lib
             {
                 var sbEap = new StringBuilder();
                 var sbPeapEap = new StringBuilder();
-                var eapIntend     = "                    ";
+                var eapIntend = "                    ";
                 var peapEapIntend = "                        ";
                 foreach (var ca in Value)
                 {

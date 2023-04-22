@@ -85,9 +85,9 @@ namespace ProfileXMLBuilder.PS
                     CertSelectionEku: Authentication.CertSelectionEku)
                 .SetDisableClassBasedDefaultRoute(DisableClassBasedDefaultRoutes);
 
-            if (Routes != null) builder.AddRoutesInternal(Routes);
-            if (TrafficFilters != null) builder.AddTrafficFiltersInternal(TrafficFilters);
-            if (DomainNameInformation != null) builder.AddDomainNameInformationInternal(DomainNameInformation);
+            if (Routes != null) builder.AddRoutes(Routes);
+            if (TrafficFilters != null) builder.AddTrafficFilters(TrafficFilters);
+            if (DomainNameInformation != null) builder.AddDomainNameInformation(DomainNameInformation);
             if (AppTriggers != null)
             {
                 foreach (var appTrigger in AppTriggers)

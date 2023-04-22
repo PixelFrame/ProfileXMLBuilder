@@ -7,7 +7,7 @@ var builder = new Builder()
     .SetDeviceCompliance(true, null, "00abcdef00abcdef00abcdef00abcdef00abcdef")
     .AddAppTrigger("%WINDIR%\\system32\\ping.exe")
     .AddAppTrigger("%WINDIR%\\system32\\tracert.exe")
-    .AddTrafficFilter(null, null, null, null, "21-10245, 1", null, "10.1.1.1, 10.1.1.2", RoutingPolicyType.ForceTunnel, TrafficDirection.Outbound)
+    .AddTrafficFilter(null, null, null, null, "21-10245, 1", "10.1.1.1-10.1.1.50", "10.1.1.1, 10.1.1.2", RoutingPolicyType.ForceTunnel, TrafficDirection.Outbound)
     .AddDomainNameInformation(".contoso.com", "10.1.1.1", null, null, null)
     .AddDomainNameInformation("contoso.com", "10.1.1.1", null, null, null)
     .SetAuthentication(AuthenticationMethod.UserPeapTls,

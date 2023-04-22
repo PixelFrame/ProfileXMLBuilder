@@ -4,8 +4,6 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
-[assembly:InternalsVisibleTo("ProfileXMLBuilder.PS")]
-
 namespace ProfileXMLBuilder.Lib
 {
     public class Builder
@@ -121,7 +119,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        internal Builder AddDomainNameInformationInternal(DomainNameInformation[] domainNameInformation)
+        public Builder AddDomainNameInformation(DomainNameInformation[] domainNameInformation)
         {
             _profile.DomainNameInformation ??= new();
             _profile.DomainNameInformation.AddRange(domainNameInformation);
@@ -148,7 +146,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        internal Builder AddTrafficFiltersInternal(TrafficFilter[] trafficFilters)
+        public Builder AddTrafficFilters(TrafficFilter[] trafficFilters)
         {
             _profile.TrafficFilter ??= new();
             _profile.TrafficFilter.AddRange(trafficFilters);
@@ -375,7 +373,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        internal Builder AddRoutesInternal(Route[] route)
+        public Builder AddRoutes(Route[] route)
         {
             _profile.Route ??= new();
             _profile.Route.AddRange(route);

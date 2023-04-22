@@ -120,7 +120,7 @@ namespace ProfileXMLBuilder.Lib
                             Faulty = address;
                             return false;
                         }
-                        if (b.IPAddressComparison(e) < 0)
+                        if (b.IPAddressComparison(e) >= 0)
                         {
                             Faulty = address;
                             return false;

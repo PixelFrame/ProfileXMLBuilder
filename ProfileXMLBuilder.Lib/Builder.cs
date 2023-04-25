@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -35,6 +34,7 @@ namespace ProfileXMLBuilder.Lib
                 {
                     _ = _ &&
                         _profile.NativeProfile.NativeProtocolType != "ProtocolList" &&
+                        _profile.NativeProfile.NativeProtocolType != "SSTP" &&
                         _profile.NativeProfile.ProtocolList == null;
                 }
                 return !_;
@@ -143,6 +143,11 @@ namespace ProfileXMLBuilder.Lib
         public Builder SetUseRasCredentials(bool? Value)
         {
             _profile.UseRasCredentials = Value;
+            return this;
+        }
+        public Builder SetProxy(Proxy? Value)
+        {
+            _profile.Proxy = Value;
             return this;
         }
 
@@ -333,6 +338,13 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
+        public Builder SetCryptographySuite(CryptographySuite? Value)
+        {
+            _profile.NativeProfile ??= new();
+            _profile.NativeProfile.CryptographySuite = Value;
+            return this;
+        }
+
         public Builder SetCryptographySuite(
             AuthenticationTransformConstants? authenticationTransformConstants,
             CipherTransformConstants? cipherTransformConstants,
@@ -393,22 +405,24 @@ namespace ProfileXMLBuilder.Lib
             }
             else
             {
-                var eapBuilder = new EapBuilder(AuthMethod)
-                    .SetRadiusServerRootCA(RadiusServerRootCA)
-                    .SetDisableServerValidationPrompt(DisableServerValidationPrompt)
-                    .SetRadiusServerNames(RadiusServerNames);
-
-                if (CertSelectionCA != null)
+                var eapBuilder = new EapBuilder(AuthMethod);
+                if (AuthMethod != AuthenticationMethod.UserEapMschapv2)
                 {
-                    eapBuilder.AddCertificateSelectionHash(CertSelectionCA);
-                }
-                if (AllPurposeEnabled != null)
-                {
-                    eapBuilder.SetCertificateSelectionAllPurpose(AllPurposeEnabled);
-                }
-                if (CertSelectionEku != null)
-                {
-                    eapBuilder.AddCertificateSelectionEku(CertSelectionEku);
+                    eapBuilder.SetRadiusServerRootCA(RadiusServerRootCA)
+                        .SetDisableServerValidationPrompt(DisableServerValidationPrompt)
+                        .SetRadiusServerNames(RadiusServerNames);
+                    if (CertSelectionCA != null)
+                    {
+                        eapBuilder.AddCertificateSelectionHash(CertSelectionCA);
+                    }
+                    if (AllPurposeEnabled != null)
+                    {
+                        eapBuilder.SetCertificateSelectionAllPurpose(AllPurposeEnabled);
+                    }
+                    if (CertSelectionEku != null)
+                    {
+                        eapBuilder.AddCertificateSelectionEku(CertSelectionEku);
+                    }
                 }
 
                 var eap = new Eap()
@@ -444,7 +458,7 @@ namespace ProfileXMLBuilder.Lib
                 _AuthMethod != AuthenticationMethod.UserPeapTls &&
                 _AuthMethod != AuthenticationMethod.UserPeapMschapv2)
             {
-                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS server names");
+                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS root CA");
             }
             SetAuthentication(_AuthMethod, _RadiusServerNames, Value, _DisableServerValidationPrompt, _CertSelectionCA, _AllPurposeEnabled, _CertSelectionEku);
             return this;
@@ -456,7 +470,7 @@ namespace ProfileXMLBuilder.Lib
                 _AuthMethod != AuthenticationMethod.UserPeapTls &&
                 _AuthMethod != AuthenticationMethod.UserPeapMschapv2)
             {
-                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS server names");
+                throw new InvalidOperationException("Current Authentication Method does not need to set RADIUS server validation");
             }
             SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, Value, _CertSelectionCA, _AllPurposeEnabled, _CertSelectionEku);
             return this;

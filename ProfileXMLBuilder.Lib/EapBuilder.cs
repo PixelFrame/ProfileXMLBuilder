@@ -259,7 +259,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public EapBuilder AddCertificateSelectionEku(List<KeyValuePair<string, string>> Value)
+        public EapBuilder AddCertificateSelectionEku(List<Eku> Value)
         {
             ReplaceTlsExtensionIfNotDone();
             const string XmlEkuList =
@@ -281,10 +281,10 @@ namespace ProfileXMLBuilder.Lib
             foreach (var eku in Value)
             {
                 sbEkuMap.AppendLine($"{intend}  <EKUMap>");
-                sbEkuMap.AppendLine($"{intend}    <EKUName>{eku.Key}</EKUName>");
-                sbEkuMap.AppendLine($"{intend}    <EKUOID>{eku.Value}</EKUOID>");
+                sbEkuMap.AppendLine($"{intend}    <EKUName>{eku.Name}</EKUName>");
+                sbEkuMap.AppendLine($"{intend}    <EKUOID>{eku.OID}</EKUOID>");
                 sbEkuMap.AppendLine($"{intend}  </EKUMap>");
-                sbEkuName.AppendLine($"{intend}    <EKUName>{eku.Key}</EKUName>");
+                sbEkuName.AppendLine($"{intend}    <EKUName>{eku.Name}</EKUName>");
             }
             _template = _template.Replace("{EKUMap}", sbEkuMap.ToString());
             _template = _template.Replace("{EKUName}", sbEkuName.ToString());

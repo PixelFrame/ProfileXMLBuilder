@@ -288,6 +288,12 @@ namespace ProfileXMLBuilder.Lib
         public uint? Metric { get; set; } = null;
     }
 
+    public class Eku
+    {
+        public string Name = string.Empty;
+        public string OID = string.Empty;
+    }
+
     public class Eap : IXmlSerializable
     {
         [XmlElement("Configuration")]

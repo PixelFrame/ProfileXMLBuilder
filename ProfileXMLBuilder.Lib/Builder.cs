@@ -15,7 +15,7 @@ namespace ProfileXMLBuilder.Lib
         private bool? _DisableServerValidationPrompt;
         private List<string>? _CertSelectionCA;
         private bool? _AllPurposeEnabled;
-        private List<KeyValuePair<string, string>>? _CertSelectionEku;
+        private List<Eku>? _CertSelectionEku;
 
         public bool Win11Profile
         {
@@ -373,7 +373,7 @@ namespace ProfileXMLBuilder.Lib
             bool? DisableServerValidationPrompt,
             List<string>? CertSelectionCA,
             bool? AllPurposeEnabled,
-            List<KeyValuePair<string, string>>? CertSelectionEku)
+            List<Eku>? CertSelectionEku)
         {
             // Save the state for the partial modification
             _AuthMethod = AuthMethod;
@@ -482,7 +482,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder SetCertificateSelectionEku(List<KeyValuePair<string, string>>? Value)
+        public Builder SetCertificateSelectionEku(List<Eku>? Value)
         {
             SetAuthentication(_AuthMethod, _RadiusServerNames, _RadiusServerRootCA, _DisableServerValidationPrompt, _CertSelectionCA, _AllPurposeEnabled, Value);
             return this;

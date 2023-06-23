@@ -1,7 +1,7 @@
-﻿using System.Xml.Schema;
+﻿using System.Net;
 using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
-using System.Net;
 
 namespace ProfileXMLBuilder.Lib
 {

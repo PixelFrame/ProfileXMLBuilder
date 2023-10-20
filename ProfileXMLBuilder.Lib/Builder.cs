@@ -289,6 +289,10 @@ namespace ProfileXMLBuilder.Lib
         {
             _profile.NativeProfile ??= new();
             _profile.NativeProfile.RoutingPolicyType = Type?.ToString();
+            if (Type == RoutingPolicyType.ForceTunnel)
+            {
+                _profile.NativeProfile.DisableClassBasedDefaultRoute = null; // This option does not apply to force tunnel
+            }
             return this;
         }
 
@@ -327,7 +331,14 @@ namespace ProfileXMLBuilder.Lib
         public Builder SetDisableClassBasedDefaultRoute(bool? Value)
         {
             _profile.NativeProfile ??= new();
-            _profile.NativeProfile.DisableClassBasedDefaultRoute = Value;
+            if (_profile.NativeProfile.RoutingPolicyType == RoutingPolicyType.ForceTunnel.ToString())  // This option does not apply to force tunnel
+            {
+                _profile.NativeProfile.DisableClassBasedDefaultRoute = null;
+            }
+            else
+            {
+                _profile.NativeProfile.DisableClassBasedDefaultRoute = Value;
+            }
             return this;
         }
 

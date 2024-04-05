@@ -174,7 +174,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public EapBuilder SetRadiusServerRootCA(List<string>? Value)
+        public EapBuilder SetRadiusServerRootCA(IEnumerable<string>? Value)
         {
             if (Value == null)
             {
@@ -227,7 +227,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public EapBuilder AddCertificateSelectionHash(List<string> Value)
+        public EapBuilder AddCertificateSelectionHash(IEnumerable<string> Value)
         {
             ReplaceTlsExtensionIfNotDone();
             const string XmlCAHashList =
@@ -254,7 +254,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public EapBuilder AddCertificateSelectionEku(List<Eku> Value)
+        public EapBuilder AddCertificateSelectionEku(IEnumerable<Eku> Value)
         {
             ReplaceTlsExtensionIfNotDone();
             const string XmlEkuList =

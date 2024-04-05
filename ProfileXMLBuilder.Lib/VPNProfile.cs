@@ -117,10 +117,7 @@ namespace ProfileXMLBuilder.Lib
     public class App
     {
         public string Id = string.Empty;
-        public override string ToString()
-        {
-            return Id;
-        }
+        public AppType Type = AppType.FilePath;
     }
 
     public class DomainNameInformation

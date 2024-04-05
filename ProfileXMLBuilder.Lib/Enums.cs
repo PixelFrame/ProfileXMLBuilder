@@ -126,4 +126,10 @@
         Max,
         Optional
     }
+
+    public enum AppType
+    {
+        FilePath,
+        PackageFamilyName
+    }
 }

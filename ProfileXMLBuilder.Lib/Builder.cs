@@ -11,11 +11,11 @@ namespace ProfileXMLBuilder.Lib
 
         private AuthenticationMethod _AuthMethod;
         private string? _RadiusServerNames;
-        private List<string>? _RadiusServerRootCA;
+        private IEnumerable<string>? _RadiusServerRootCA;
         private bool? _DisableServerValidationPrompt;
-        private List<string>? _CertSelectionCA;
+        private IEnumerable<string>? _CertSelectionCA;
         private bool? _AllPurposeEnabled;
-        private List<Eku>? _CertSelectionEku;
+        private IEnumerable<Eku>? _CertSelectionEku;
 
         public bool Win11Profile
         {
@@ -194,16 +194,24 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder AddAppTrigger(string AppId)
+        public Builder AddAppTrigger(string AppId, AppType Type)
         {
             _profile.AppTrigger ??= new();
             _profile.AppTrigger.Add(new()
             {
                 App = new()
                 {
-                    Id = AppId
+                    Id = AppId,
+                    Type = Type
                 }
             });
+            return this;
+        }
+
+        public Builder AddAppTriggers(IEnumerable<AppTrigger> AppTriggers)
+        {
+            _profile.AppTrigger ??= new();
+            _profile.AppTrigger.AddRange(AppTriggers);
             return this;
         }
 
@@ -213,7 +221,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder AddDomainNameInformation(DomainNameInformation[] domainNameInformation)
+        public Builder AddDomainNameInformation(IEnumerable<DomainNameInformation> domainNameInformation)
         {
             _profile.DomainNameInformation ??= new();
             _profile.DomainNameInformation.AddRange(domainNameInformation);
@@ -240,7 +248,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder AddTrafficFilters(TrafficFilter[] trafficFilters)
+        public Builder AddTrafficFilters(IEnumerable<TrafficFilter> trafficFilters)
         {
             _profile.TrafficFilter ??= new();
             _profile.TrafficFilter.AddRange(trafficFilters);
@@ -308,7 +316,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder SetNativeProtocolList(NativeProtocolListType[] Types, int? RetryTimeInHours = null)
+        public Builder SetNativeProtocolList(IEnumerable<NativeProtocolListType> Types, int? RetryTimeInHours = null)
         {
             _profile.NativeProfile ??= new();
             _profile.NativeProfile.NativeProtocolType = NativeProtocolType.ProtocolList.ToString();
@@ -380,11 +388,11 @@ namespace ProfileXMLBuilder.Lib
         public Builder SetAuthentication(
             AuthenticationMethod AuthMethod,
             string? RadiusServerNames,
-            List<string>? RadiusServerRootCA,
+            IEnumerable<string>? RadiusServerRootCA,
             bool? DisableServerValidationPrompt,
-            List<string>? CertSelectionCA,
+            IEnumerable<string>? CertSelectionCA,
             bool? AllPurposeEnabled,
-            List<Eku>? CertSelectionEku)
+            IEnumerable<Eku>? CertSelectionEku)
         {
             // Save the state for the partial modification
             _AuthMethod = AuthMethod;
@@ -505,7 +513,7 @@ namespace ProfileXMLBuilder.Lib
             return this;
         }
 
-        public Builder AddRoutes(Route[] route)
+        public Builder AddRoutes(IEnumerable<Route> route)
         {
             _profile.Route ??= new();
             _profile.Route.AddRange(route);

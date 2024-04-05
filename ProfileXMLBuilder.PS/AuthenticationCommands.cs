@@ -71,7 +71,11 @@ namespace ProfileXMLBuilder.PS
                     auth.CertSelectionEku = new();
                     foreach (DictionaryEntry _ in CertSelectionEku)
                     {
-                        auth.CertSelectionEku.Add(new(_.Key.ToString(), _.Value.ToString()));
+                        auth.CertSelectionEku.Add(new()
+                        {
+                            Name = _.Key.ToString(),
+                            OID = _.Value.ToString(),
+                        });
                     }
                 }
             }
@@ -91,6 +95,6 @@ namespace ProfileXMLBuilder.PS
         public bool? DisableServerValidationPrompt;
         public List<string>? CertSelectionCA;
         public bool? AllPurposeEnabled;
-        public List<KeyValuePair<string, string>>? CertSelectionEku;
+        public List<Eku>? CertSelectionEku;
     }
 }

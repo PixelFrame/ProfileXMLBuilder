@@ -44,7 +44,7 @@ namespace ProfileXMLBuilder.PS
         public TrafficFilter[]? TrafficFilters { get; set; }
 
         [Parameter(Mandatory = false)]
-        public string[]? AppTriggers { get; set; }
+        public AppTrigger[]? AppTriggers { get; set; }
 
         [Parameter(Mandatory = false)]
         public ProxyType ProxyType { get; set; }
@@ -88,13 +88,7 @@ namespace ProfileXMLBuilder.PS
             if (Routes != null) builder.AddRoutes(Routes);
             if (TrafficFilters != null) builder.AddTrafficFilters(TrafficFilters);
             if (DomainNameInformation != null) builder.AddDomainNameInformation(DomainNameInformation);
-            if (AppTriggers != null)
-            {
-                foreach (var appTrigger in AppTriggers)
-                {
-                    builder.AddAppTrigger(appTrigger);
-                }
-            }
+            if (AppTriggers != null) builder.AddAppTriggers(AppTriggers);
             if (ProxyValue != null) builder.SetProxy(ProxyType, ProxyValue);
             if (SsoEku != null || SsoCA != null) builder.SetDeviceCompliance(true, SsoEku, SsoCA);
             if (NoRegisterDNS) builder.SetRegisterDNS(false);
@@ -122,9 +116,9 @@ namespace ProfileXMLBuilder.PS
                 .SetAuthentication(
                     AuthMethod: AuthenticationMethod.UserPeapTls,
                     RadiusServerNames: "nps.contoso.com",
-                    RadiusServerRootCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
+                    RadiusServerRootCA: ["00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 "],
                     DisableServerValidationPrompt: false,
-                    CertSelectionCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
+                    CertSelectionCA: ["00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 "],
                     AllPurposeEnabled: true,
                     CertSelectionEku: null)
                 .AddDomainNameInformation(".contoso.com", "10.1.1.1", null, null, null)
@@ -152,9 +146,9 @@ namespace ProfileXMLBuilder.PS
                 .SetAuthentication(
                     AuthMethod: AuthenticationMethod.UserEapTls,
                     RadiusServerNames: "nps.contoso.com",
-                    RadiusServerRootCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
+                    RadiusServerRootCA: ["00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 "],
                     DisableServerValidationPrompt: false,
-                    CertSelectionCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
+                    CertSelectionCA: ["00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 "],
                     AllPurposeEnabled: true,
                     CertSelectionEku: null)
                 .AddDomainNameInformation(".contoso.com", "10.1.1.1", null, null, null)
@@ -212,7 +206,7 @@ namespace ProfileXMLBuilder.PS
                 .SetAuthentication(
                     AuthMethod: AuthenticationMethod.UserPeapMschapv2,
                     RadiusServerNames: "nps.contoso.com",
-                    RadiusServerRootCA: new() { "00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 " },
+                    RadiusServerRootCA: ["00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff 02 05 00 01 "],
                     DisableServerValidationPrompt: false,
                     CertSelectionCA: null,
                     AllPurposeEnabled: null,
